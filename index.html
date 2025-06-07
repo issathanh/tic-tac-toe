@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Tic-Tac-Toe</h1>
+
+        <div class="setup-section">
+            <div class="player-inputs">
+                <div class="player-input">
+                    <label for="player1-name">Player 1 (X)</label>
+                    <input type="text" id="player1-name" placeholder="player 1">
+                </div>
+                <div class="player-input">
+                    <label for="player2-name">Player 2(O)</label>
+                    <input type="text" id="player2-name" placeholder="player 2">
+                </div>
+            </div>
+        </div>
+
+        <div class="game-control">
+            <button id="start-game">Start New Game</button>
+        </div>
+
+        <div class="game-info" id=game-info>
+            Click "Start New Game" to begin!
+        </div>
+
+        <div class="game-reslt" id="gameResult"></div>
+
+        <div class="game-board" id="gameBoard">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+    </div>
+    <script>
+        //gameBoard module
+        const gameBoard = (() => {
+            let board = ["","","","","","","","","",]
+            const getBoard = () => board; 
+            //add selection only if cell is empty  
+            const setCell = (index, marker) =>{
+                if(board[index] == ""){
+                    board[index] = marker; 
+                    return true; 
+                }
+                return false; 
+            }
+
+            
+        })
+    </script>
+</body>
+
+</html>

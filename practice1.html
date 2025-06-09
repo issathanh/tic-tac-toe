@@ -61,7 +61,7 @@
                     boardArray[squareIndex] = currentPlayer;
                     button.textContent = currentPlayer;
                     switchPlayer();
-                    
+                    gameState();
                 }
             })
         })
@@ -91,6 +91,12 @@
         function isFilled(){
             // return true if the array is filled
             return boardArray.every(square => square !== "") 
+        }
+        //check game state
+        function gameState(){
+            if(checkState()!=null){
+                console.log(`Winner: ${checkState()}`)
+            }
         }
     </script>
 </body>

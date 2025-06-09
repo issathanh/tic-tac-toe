@@ -49,18 +49,33 @@
     <script>
         //gameBoard module
         const gameBoard = (() => {
-            let board = ["","","","","","","","","",]
-            const getBoard = () => board; 
+            let board = ["", "", "", "", "", "", "", "", "",]
+            const getBoard = () => board;
             //add selection only if cell is empty  
-            const setCell = (index, marker) =>{
-                if(board[index] == ""){
-                    board[index] = marker; 
-                    return true; 
+            const setCell = (index, marker) => {
+                if (board[index] == "") {
+                    board[index] = marker;
+                    return true;
                 }
-                return false; 
+                return false;
+            }
+            // check if a cell is empty
+            const isCellEmpty = (index) => board[index] == "";
+            //reset the board
+            const reset = (){
+                let board = ["", "", "", "", "", "", "", "", "",]
+
             }
 
+            const isFull = () =>board.every(cell=>cell!=="")
             
+            return{
+                getBoard,
+                setCell,
+                isCellEmpty,
+                reset,
+                isFull
+            }
         })
     </script>
 </body>

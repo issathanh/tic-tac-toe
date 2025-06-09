@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .setup-section {
+            margin-bottom: 2rem;
+        }
+
+        .player-inputs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .player-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .player-input label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .player-input input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .player-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .game-controls {
+            margin-bottom: 2rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .game-info {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #555;
+            min-height: 1.5rem;
+        }
+
+        .current-player {
+            color: #667eea;
+        }
+
+        .gameboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 0 auto 2rem;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell:hover {
+            background: #e8f2ff;
+            transform: scale(1.05);
+        }
+
+        .cell.taken {
+            cursor: not-allowed;
+        }
+
+        .cell.taken:hover {
+            background: white;
+            transform: none;
+        }
+
+        .cell.x {
+            color: #e74c3c;
+        }
+
+        .cell.o {
+            color: #3498db;
+        }
+
+        .cell.winning {
+            background: #2ecc71 !important;
+            color: white !important;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .game-result {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .game-result.winner {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .game-result.tie {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .player-inputs {
+                flex-direction: column;
+            }
+            
+            .cell {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎮 Tic-Tac-Toe</h1>
+        
+        <div class="setup-section">
+            <div class="player-inputs">
+                <div class="player-input">
+                    <label for="player1-name">Player 1 (X):</label>
+                    <input type="text" id="player1-name" placeholder="Enter name" value="Player 1">
+                </div>
+                <div class="player-input">
+                    <label for="player2-name">Player 2 (O):</label>
+                    <input type="text" id="player2-name" placeholder="Enter name" value="Player 2">
+                </div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button id="start-game">Start New Game</button>
+        </div>
+
+        <div class="game-info" id="game-info">
+            Click "Start New Game" to begin!
+        </div>
+
+        <div class="game-result" id="game-result"></div>
+
+        <div class="gameboard" id="gameboard">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+    </div>
+
+    <script>
+        // Gameboard module (IIFE for single instance)
+        const Gameboard = (() => {
+            let board = ["", "", "", "", "", "", "", "", ""];
+
+            const getBoard = () => board;
+            
+            const setCell = (index, marker) => {
+                if (board[index] === "") {
+                    board[index] = marker;
+                    return true;
+                }
+                return false;
+            };
+
+            const isCellEmpty = (index) => board[index] === "";
+
+            const reset = () => {
+                board = ["", "", "", "", "", "", "", "", ""];
+            };
+
+            const isFull = () => board.every(cell => cell !== "");
+
+            return {
+                getBoard,
+                setCell,
+                isCellEmpty,
+                reset,
+                isFull
+            };
+        })();
+
+        // Player factory function
+        const Player = (name, marker) => {
+            return { name, marker };
+        };
+
+        // Game Controller module (IIFE for single instance)
+        const GameController = (() => {
+            let players = [];
+            let currentPlayerIndex = 0;
+            let gameActive = false;
+            let gameResult = null;
+
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                [0, 4, 8], [2, 4, 6] // diagonals
+            ];
+
+            const initializePlayers = (player1Name, player2Name) => {
+                players = [
+                    Player(player1Name || "Player 1", "X"),
+                    Player(player2Name || "Player 2", "O")
+                ];
+            };
+
+            const startGame = (player1Name, player2Name) => {
+                initializePlayers(player1Name, player2Name);
+                currentPlayerIndex = 0;
+                gameActive = true;
+                gameResult = null;
+                Gameboard.reset();
+            };
+
+            const getCurrentPlayer = () => players[currentPlayerIndex];
+
+            const switchPlayer = () => {
+                currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+            };
+
+            const checkWin = () => {
+                const board = Gameboard.getBoard();
+                
+                for (let combination of winningCombinations) {
+                    const [a, b, c] = combination;
+                    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                        return {
+                            winner: getCurrentPlayer(),
+                            winningCombination: combination
+                        };
+                    }
+                }
+                return null;
+            };
+
+            const checkTie = () => {
+                return Gameboard.isFull() && !checkWin();
+            };
+
+            const makeMove = (index) => {
+                if (!gameActive || !Gameboard.isCellEmpty(index)) {
+                    return false;
+                }
+
+                const currentPlayer = getCurrentPlayer();
+                if (Gameboard.setCell(index, currentPlayer.marker)) {
+                    const winResult = checkWin();
+                    if (winResult) {
+                        gameActive = false;
+                        gameResult = { type: 'win', winner: winResult.winner, winningCombination: winResult.winningCombination };
+                        return true;
+                    }
+                    
+                    if (checkTie()) {
+                        gameActive = false;
+                        gameResult = { type: 'tie' };
+                        return true;
+                    }
+
+                    switchPlayer();
+                    return true;
+                }
+                return false;
+            };
+
+            const isGameActive = () => gameActive;
+            const getGameResult = () => gameResult;
+            const getPlayers = () => players;
+
+            return {
+                startGame,
+                makeMove,
+                getCurrentPlayer,
+                isGameActive,
+                getGameResult,
+                getPlayers
+            };
+        })();
+
+        // Display Controller module (IIFE for single instance)
+        const DisplayController = (() => {
+            const gameInfoElement = document.getElementById('game-info');
+            const gameResultElement = document.getElementById('game-result');
+            const startButton = document.getElementById('start-game');
+            const player1Input = document.getElementById('player1-name');
+            const player2Input = document.getElementById('player2-name');
+            const cells = document.querySelectorAll('.cell');
+
+            const updateGameInfo = () => {
+                if (!GameController.isGameActive()) {
+                    gameInfoElement.textContent = "Click 'Start New Game' to play!";
+                    return;
+                }
+
+                const currentPlayer = GameController.getCurrentPlayer();
+                gameInfoElement.innerHTML = `<span class="current-player">${currentPlayer.name}</span>'s turn (${currentPlayer.marker})`;
+            };
+
+            const updateBoard = () => {
+                const board = Gameboard.getBoard();
+                cells.forEach((cell, index) => {
+                    cell.textContent = board[index];
+                    cell.className = 'cell';
+                    
+                    if (board[index]) {
+                        cell.classList.add('taken');
+                        cell.classList.add(board[index].toLowerCase());
+                    }
+                });
+            };
+
+            const highlightWinningCells = (winningCombination) => {
+                winningCombination.forEach(index => {
+                    cells[index].classList.add('winning');
+                });
+            };
+
+            const showGameResult = () => {
+                const result = GameController.getGameResult();
+                if (!result) return;
+
+                gameResultElement.style.display = 'block';
+                gameResultElement.className = 'game-result';
+
+                if (result.type === 'win') {
+                    gameResultElement.classList.add('winner');
+                    gameResultElement.textContent = `🎉 ${result.winner.name} wins!`;
+                    highlightWinningCells(result.winningCombination);
+                } else if (result.type === 'tie') {
+                    gameResultElement.classList.add('tie');
+                    gameResultElement.textContent = "🤝 It's a tie!";
+                }
+            };
+
+            const hideGameResult = () => {
+                gameResultElement.style.display = 'none';
+            };
+
+            const handleCellClick = (e) => {
+                const index = parseInt(e.target.dataset.index);
+                if (GameController.makeMove(index)) {
+                    updateBoard();
+                    updateGameInfo();
+                    
+                    if (!GameController.isGameActive()) {
+                        showGameResult();
+                    }
+                }
+            };
+
+            const handleStartGame = () => {
+                const player1Name = player1Input.value.trim();
+                const player2Name = player2Input.value.trim();
+                
+                GameController.startGame(player1Name, player2Name);
+                updateBoard();
+                updateGameInfo();
+                hideGameResult();
+            };
+
+            // Initialize event listeners
+            const init = () => {
+                cells.forEach(cell => {
+                    cell.addEventListener('click', handleCellClick);
+                });
+
+                startButton.addEventListener('click', handleStartGame);
+
+                // Allow Enter key to start game from input fields
+                [player1Input, player2Input].forEach(input => {
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            handleStartGame();
+                        }
+                    });
+                });
+
+                updateGameInfo();
+            };
+
+            return { init };
+        })();
+
+        // Initialize the game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            DisplayController.init();
+        });
+    </script>
+</body>
+</html>

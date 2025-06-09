@@ -24,20 +24,20 @@
 <body>
     <div class="game-container">
         <div class="game-board">
-            <button id="button-0"></button>
-            <button id="button-1"></button>
-            <button id="button-2"></button>
-            <button id="button-3"></button>
-            <button id="button-4"></button>
-            <button id="button-5"></button>
-            <button id="button-6"></button>
-            <button id="button-7"></button>
-            <button id="button-8"></button>
+            <button id="button-0" data-index="0"></button>
+            <button id="button-1" data-index="1"></button>
+            <button id="button-2" data-index="2"></button>
+            <button id="button-3" data-index="3"></button>
+            <button id="button-4" data-index="4"></button>
+            <button id="button-5" data-index="5"></button>
+            <button id="button-6" data-index="6"></button>
+            <button id="button-7" data-index="7"></button>
+            <button id="button-8" data-index="8"></button>
         </div>
     </div>
     <script>
         let currentPlayer = "X"
-
+        let boardArray = ["", "", "", "", "", "", "", "", "",]
         function switchPlayer() {
             currentPlayer = currentPlayer === "X" ? "O" : "X"
         }
@@ -50,9 +50,28 @@
             console.log(currentPlayer)
         }
 
-        function buttonPressed(){
-            
-        }
+        // select the button element
+        const buttons = document.querySelectorAll('button')
+        // button.addEventListener('click', function(event){
+        //     // dataset is an api and it remove the data from data-index attribute leaving you with dataset.index
+        //     const squareIndex = event.target.dataset.index; 
+        //     const squareId = `button${squareIndex}` 
+        //     console.log(squareId)
+        // })
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                const squareIndex = event.target.dataset.index;
+                if (boardArray[squareIndex] == "") {
+                    boardArray[squareIndex] = currentPlayer; 
+                    button.textContent =currentPlayer; 
+                    switchPlayer();
+                    console.log(boardArray)
+                }
+            })
+        })
+
+        
     </script>
 </body>
 

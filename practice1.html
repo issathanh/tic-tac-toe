@@ -52,26 +52,46 @@
 
         // select the button element
         const buttons = document.querySelectorAll('button')
-        // button.addEventListener('click', function(event){
-        //     // dataset is an api and it remove the data from data-index attribute leaving you with dataset.index
-        //     const squareIndex = event.target.dataset.index; 
-        //     const squareId = `button${squareIndex}` 
-        //     console.log(squareId)
-        // })
 
+        //when each button is clicked assign it a symbol and switch symbol of currentPlayer 
         buttons.forEach(button => {
             button.addEventListener('click', function (event) {
                 const squareIndex = event.target.dataset.index;
                 if (boardArray[squareIndex] == "") {
-                    boardArray[squareIndex] = currentPlayer; 
-                    button.textContent =currentPlayer; 
+                    boardArray[squareIndex] = currentPlayer;
+                    button.textContent = currentPlayer;
                     switchPlayer();
-                    console.log(boardArray)
+                    
                 }
             })
         })
 
-        
+        //game logic 
+        const winPattern = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+        //return winnder or nulls
+        function checkState() {
+            for (pattern of winPattern) {
+                [a, b, c] = pattern
+                if (boardArray[a] && boardArray[a] == boardArray[b] && boardArray[a] == boardArray[c]) {
+                    return boardArray[a]
+                }
+            }
+            return null // no winner yet
+        }
+        // check if the array is filled
+        function isFilled(){
+            // return true if the array is filled
+            return boardArray.every(square => square !== "") 
+        }
     </script>
 </body>
 
